@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#F8FAFC] text-[#0F172A] antialiased transition-colors duration-300;
+  }
+  .dark body {
+    background-color: #020617; /* Slate-950 */
+    color: #F8FAFC; /* Slate-50 */
+  }
+}
+
+/* Custom Scrollbar for nicer look */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-[#f1f1f1] dark:bg-[#0F172A];
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-[#c1c1c1] dark:bg-[#334155] rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#a8a8a8] dark:bg-[#475569];
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Supabase Test</title>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+    
+    const supabaseUrl = 'YOUR_SUPABASE_URL'
+    const supabaseKey = 'YOUR_SUPABASE_KEY'
+    const supabase = createClient(supabaseUrl, supabaseKey)
+    
+    async function testLogin() {
+      console.log('Testing login...')
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: 'admin@bugless.com',
+        password: 'bugless123'
+      })
+      
+      if (error) {
+        console.error('Login error:', error)
+        document.getElementById('result').innerHTML = `<p style="color:red">Error: ${error.message}</p>`
+      } else {
+        console.log('Login success:', data)
+        document.getElementById('result').innerHTML = `<p style="color:green">Login successful! User: ${data.user.email}</p>`
+        
+        // Test profile fetch
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.user.id)
+          .single()
+          
+        if (profileError) {
+          console.error('Profile error:', profileError)
+          document.getElementById('profile').innerHTML = `<p style="color:red">Profile Error: ${profileError.message}</p>`
+        } else {
+          console.log('Profile:', profile)
+          document.getElementById('profile').innerHTML = `<p style="color:green">Profile: ${JSON.stringify(profile, null, 2)}</p>`
+        }
+      }
+    }
+    
+    window.testLogin = testLogin
+  </script>
+</head>
+<body>
+  <h1>Supabase Connection Test</h1>
+  <button onclick="testLogin()">Test Login</button>
+  <div id="result"></div>
+  <div id="profile"></div>
+</body>
+</html>
